@@ -1,4 +1,4 @@
-# API .NET (WIP)
+# API .NET
 
 My API built with .NET, [take a look](https://api-csharp.josepaulo.dev/api/v1.0/welcome) 🖖.
 
@@ -13,7 +13,6 @@ Utilizei esta API para aplicar meus estudos da plataforma .NET. Com ela consigo 
 ## Requisitos
 
 - [.NET 8](https://dotnet.microsoft.com)
-- [Visual Studio](https://visualstudio.microsoft.com/pt-br/vs/community)
 
 ## Tecnologias utilizadas
 
@@ -39,13 +38,13 @@ dotnet restore
 
 ```sh
 # run in http://localhost:5000
-dotnet run
+dotnet run --project src/WebApi/WebApi.csproj
 ```
 
 ### Buildar projeto
 
 ```sh
-dotnet build
+dotnet build --project src/WebApi/WebApi.csproj
 ```
 
 [**Voltar ao inicio**](#api-net)
