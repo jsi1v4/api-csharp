@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Authentication/" />
     <Folder Include="Core/" />
-    <Folder Include="Features/v1/Users/DTOs/" />
-    <Folder Include="Features/v1/Users/Models/" />
   </ItemGroup>
 
 </Project>
