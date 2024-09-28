@@ -1,21 +1,21 @@
 using Dapper;
+using WebApi.Core;
 using WebApi.Database;
 using WebApi.Features.v1.Users.Models;
 
 namespace WebApi.Features.v1.Users;
 
-public class UsersRepository
+public class UsersRepository : Repository
 {
-  private DB _database;
+  private readonly DBContext _database;
 
-  public UsersRepository(
-    DB database
+  public UsersRepository(DBContext database
   )
   {
     _database = database;
   }
 
-  public async Task<List<UserModel>> SelectUsers(string? name)
+  public async Task<List<UserModel>> SelectUsers(int? id = null, string? name = null)
   {
     IEnumerable<UserModel> results;
 
@@ -23,13 +23,17 @@ public class UsersRepository
     {
       using (var conn = _database.Conn())
       {
-        var sql = @"SELECT * FROM 'Users' WHERE 1 = 1";
+        var sql = @"SELECT * FROM ""User"" WHERE 1 = 1";
 
-        if (String.IsNullOrEmpty(name))
+        if (id != null)
+          sql += @" AND id = @ID";
+
+        if (!String.IsNullOrEmpty(name))
           sql += @" AND name LIKE '%@NAME%'";
 
         var param = new
         {
+          ID = id,
           NAME = name
         };
 

@@ -1,4 +1,3 @@
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Features.v1.Users.DTOs;
 using WebApi.Features.v1.Users.Models;
@@ -6,10 +5,10 @@ using WebApi.Features.v1.Users.Models;
 namespace WebApi.Features.v1.Users
 {
     [ApiController]
-    [Route("/api/v1.0/users")]
+    [Route("/v1/users")]
     public class UsersController : Controller
     {
-        private UsersService _service;
+        private readonly UsersService _service;
 
         public UsersController(
             UsersService service
@@ -21,8 +20,6 @@ namespace WebApi.Features.v1.Users
         /// <summary>
         /// Retorna lista de usuarios.
         /// </summary>
-        /// <param name="query"></param>
-        /// <response code="200">Returns the newly created item</response>
         [HttpGet("")]
         [ProducesResponseType<List<UserModel>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetListUsers([FromQuery] ListUsersDTO query)
@@ -32,10 +29,16 @@ namespace WebApi.Features.v1.Users
             return Ok(users);
         }
 
+        /// <summary>
+        /// Retorna um usuario com base no ID.
+        /// </summary>
         [HttpGet("{id}")]
-        public IActionResult GetUser(int? id)
+        [ProducesResponseType<UserModel>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetUser(int id)
         {
-            return Ok();
+            var user = await _service.FindUniqueUser(id);
+
+            return Ok(user);
         }
     }
 }

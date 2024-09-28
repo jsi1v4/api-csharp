@@ -2,9 +2,8 @@ namespace WebApi.Features.v1.Users.Models;
 
 public class UserModel
 {
-  public int Id;
-  public string Email = "";
-  public string Name = "";
-  public DateTime? Birthday;
-  public string? Photo;
+  public int Id { get; set; }
+  public string Name { get; set; } = "";
+  public DateTime? Birthday { get; set; }
+  public string? Photo { get; set; }
 }

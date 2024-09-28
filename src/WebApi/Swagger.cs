@@ -1,15 +1,17 @@
+using System.Reflection;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace WebApi;
 
 public static class Swagger
 {
-  public static void BuildSwagger(WebApplicationBuilder builder)
+  public static IServiceCollection AddCustomSwagger(this IServiceCollection services, ConfigurationManager configManager)
   {
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(setup =>
+    services.AddSwaggerGen(setup =>
     {
-      var configs = builder.Configuration.GetSection("Configs").GetSection("App");
+      var configs = configManager.GetSection("Configs").GetSection("App");
 
       setup.SwaggerDoc(
           "v1",
@@ -44,32 +46,40 @@ public static class Swagger
 
       setup.AddSecurityRequirement(new OpenApiSecurityRequirement
       {
-        {
-          new OpenApiSecurityScheme
           {
-              Reference = new OpenApiReference
-              {
-                  Type = ReferenceType.SecurityScheme,
-                  Id = "Bearer"
-              }
-          },
-          new string[] {}
-        }
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+          }
       });
+
+      var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+      var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+      setup.IncludeXmlComments(xmlPath);
     });
+
+    return services;
   }
 
-  public static void UseSwagger(WebApplication app)
+  public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app, ConfigurationManager configManager)
   {
-    if (app.Environment.IsDevelopment())
+    app.UseSwagger(setup =>
     {
-      app.UseSwagger();
-      app.UseSwaggerUI(options =>
-      {
-        var configs = app.Configuration.GetSection("Configs").GetSection("App");
+    });
+    app.UseSwaggerUI(options =>
+    {
+      var configs = configManager.GetSection("Configs").GetSection("App");
 
-        options.DocumentTitle = configs.GetValue<string>("Title");
-      });
-    }
+      options.DocumentTitle = configs.GetValue<string>("Title");
+    });
+
+    return app;
   }
 }

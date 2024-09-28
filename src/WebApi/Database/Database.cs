@@ -1,21 +1,33 @@
-using Microsoft.Data.SqlClient;
+using Dapper;
+using Npgsql;
 
 namespace WebApi.Database;
 
-public class DB
+public static class Database
+{
+  public static IServiceCollection AddDatabase(this IServiceCollection services)
+  {
+    services.AddSingleton<DBContext>();
+
+    return services;
+  }
+}
+
+public class DBContext
 {
   private ConfigurationManager _configuration;
 
-  public DB(
+  public DBContext(
     ConfigurationManager configuration
   )
   {
     _configuration = configuration;
   }
 
-  public SqlConnection Conn()
+  public NpgsqlConnection Conn()
   {
     var connectionString = _configuration.GetConnectionString("DefaultConnection");
-    return new SqlConnection(connectionString);
+
+    return new NpgsqlConnection(connectionString);
   }
 }
