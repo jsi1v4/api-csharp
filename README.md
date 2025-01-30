@@ -1,6 +1,6 @@
 # API .NET
 
-My API built with .NET, [take a look](https://api-csharp.josepaulo.dev/api/v1.0/welcome) 🖖.
+My API built with .NET 🖖.
 
 ![**Preview**](preview.png)
 
